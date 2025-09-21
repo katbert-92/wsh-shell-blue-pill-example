@@ -1,1 +1,1 @@
-# wsh-shell-blue-pill-example
+# Wsh-Shell Blue Pill Example
