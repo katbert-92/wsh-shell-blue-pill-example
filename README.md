@@ -34,7 +34,7 @@ NM_PATH="/Users/katbert/my-utils/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-no
 Run `generate launch.json` vscode task
 This will create .vscode/launch.json for debugging the Blue Pill directly from VSCode.
 
-## 4. Build with cli command or vscode task
+## 4. Build
 
 ```bash
 make clean
