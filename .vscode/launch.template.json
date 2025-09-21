@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug blue_pill (OpenOCD-STLink)",
+            "presentation": {
+                "group": "Local"
+            },
+            "type": "cortex-debug",
+            "request": "launch",
+            "executable": "${workspaceFolder}/blue_pill/build/blue_pill.elf",
+            "svdFile": "${workspaceFolder}/blue_pill/platform/stm32f103.svd",
+            "gdbPath": "{{ GDB_PATH }}",
+            "showDevDebugOutput": "raw",
+            "servertype": "openocd",
+            "serverpath": "{{ OPENOCD_PATH }}",
+            "interface": "swd",
+            "configFiles": [
+                "${workspaceFolder}/blue_pill/stlink.cfg",
+                "${workspaceFolder}/blue_pill/stm32f1x.cfg"
+            ]
+        }
+    ]
+}

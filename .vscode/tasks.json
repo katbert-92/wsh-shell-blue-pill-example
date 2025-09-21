@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "problemMatcher": "$gcc",
+    "tasks": [
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make clean",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build blue_pill: release",
+            "type": "shell",
+            "command": "make BUILD=Release",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build blue_pill: debug",
+            "type": "shell",
+            "command": "make",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "generate launch.json",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python3",
+            "args": [
+                "${workspaceFolder}/utils/gen-launch.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "flash blue_pill",
+            "type": "shell",
+            "command": "openocd",
+            "args": [
+                "-f", "${workspaceFolder}/blue_pill/stlink.cfg",
+                "-f", "${workspaceFolder}/blue_pill/stm32f1x.cfg",
+                "-c", "program ${workspaceFolder}/blue_pill/build/blue_pill.elf verify reset exit"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "analyse elf of blue_pill",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python3",
+            "args": [
+                "${workspaceFolder}/utils/elf-size-analyse.py",
+                "${workspaceFolder}/blue_pill/build/blue_pill.elf"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
