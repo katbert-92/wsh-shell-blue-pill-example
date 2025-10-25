@@ -123,7 +123,7 @@ static WSH_SHELL_RET_STATE_t shell_cmd_led(const WshShellCmd_t* pcCmd, WshShell_
 }
 
 const WshShellCmd_t Shell_LedCmd = {
-    .Groups  = WSH_SHELL_CMD_GROUP_HARDWARE,
+    .Groups  = WSH_SHELL_CMD_GROUP_USER,
     .Name    = "led",
     .Descr   = "PC13 LED pin management",
     .Options = LedOptArr,
