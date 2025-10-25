@@ -1,15 +1,22 @@
 #include "shell.h"
-#include "commands.h"
+#include "shell_commands.h"
 #include "wsh_shell.h"
 
 static WshShell_t Shell = {0};
 
 static const WshShellUser_t Shell_UserTable[] = {
     {
-        .Login  = "root",
+        .Login  = "admin",
         .Salt   = "a0523cb065ee08c1",
         .Hash   = "0632cee0",  //1234
         .Groups = WSH_SHELL_CMD_GROUP_ALL,
+        .Rights = WSH_SHELL_OPT_ACCESS_ADMIN,
+    },
+    {
+        .Login  = "user",
+        .Salt   = "aa89fee902ab12e4",
+        .Hash   = "ff69cdab",  //qwer
+        .Groups = WSH_SHELL_CMD_GROUP_USER,
         .Rights = WSH_SHELL_OPT_ACCESS_ANY,
     },
 };
@@ -57,7 +64,7 @@ bool Shell_Init(const char* pcHostName) {
     if (!Shell_Commands_Init(&Shell))
         return false;
 
-    // WshShell_Auth(&Shell, "root", "1234");  //For quick auth
+    // WshShell_Auth(&Shell, "admin", "1234");  //For quick auth
 
     return true;
 }

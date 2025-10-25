@@ -44,42 +44,37 @@ bool GPIO_LedIsOn(void) {
 /* clang-format off */
 #define CMD_LED_OPT_TABLE() \
 X_CMD_ENTRY(CMD_LED_OPT_HELP, WSH_SHELL_OPT_HELP()) \
-X_CMD_ENTRY(CMD_LED_OPT_INTERACT, WSH_SHELL_OPT_INTERACT()) \
-X_CMD_ENTRY(CMD_LED_OPT_INIT, WSH_SHELL_OPT_STR(WSH_SHELL_OPT_ACCESS_EXECUTE, "-o", "--gpio", "Init or reset LED pin [init/deinit]")) \
-X_CMD_ENTRY(CMD_LED_OPT_STATE, WSH_SHELL_OPT_INT(WSH_SHELL_OPT_ACCESS_EXECUTE, "-s", "--state", "Set LED state [0/1]")) \
+X_CMD_ENTRY(CMD_LED_OPT_INIT, WSH_SHELL_OPT_STR(WSH_SHELL_OPT_ACCESS_ADMIN, "-o", "--gpio", "Init or reset LED pin [init/deinit]")) \
+X_CMD_ENTRY(CMD_LED_OPT_STATE, WSH_SHELL_OPT_INT(WSH_SHELL_OPT_ACCESS_WRITE, "-s", "--state", "Set LED state [0/1]")) \
 X_CMD_ENTRY(CMD_LED_OPT_REV, WSH_SHELL_OPT_WO_PARAM(WSH_SHELL_OPT_ACCESS_EXECUTE, "-r", "--reverse", "Reverse LED state")) \
 X_CMD_ENTRY(CMD_LED_OPT_GET, WSH_SHELL_OPT_WO_PARAM(WSH_SHELL_OPT_ACCESS_READ, "-g", "--get", "Get LED state")) \
 X_CMD_ENTRY(CMD_LED_OPT_END, WSH_SHELL_OPT_END())
+/* clang-format on */
 
 #define X_CMD_ENTRY(en, m) en,
-typedef enum {
-	CMD_LED_OPT_TABLE()
-	CMD_LED_OPT_ENUM_SIZE
-} CMD_LED_OPT_t;
+typedef enum { CMD_LED_OPT_TABLE() CMD_LED_OPT_ENUM_SIZE } CMD_LED_OPT_t;
 #undef X_CMD_ENTRY
-/* clang-format on */
 
 #define X_CMD_ENTRY(enum, opt) {enum, opt},
 static const WshShellOption_t LedOptArr[] = {CMD_LED_OPT_TABLE()};
 #undef X_CMD_ENTRY
 
 static WSH_SHELL_RET_STATE_t shell_cmd_led(const WshShellCmd_t* pcCmd, WshShell_Size_t argc,
-                                           const char* pArgv[], void* pCtx) {
-    if ((argc > 0 && pArgv == NULL) || pcCmd == NULL)
+                                           const char* pArgv[], void* pShellCtx) {
+    if ((argc > 0 && !pArgv) || !pcCmd)
         return WSH_SHELL_RET_STATE_ERROR;
 
-    WshShell_Size_t tokenPos = 0;
-    while (tokenPos < argc) {
-        WshShellOption_Context_t optCtx = WshShellCmd_ParseOpt(pcCmd, argc, pArgv, &tokenPos);
-        if (optCtx.Option == NULL)
+    WshShell_t* pParentShell = (WshShell_t*)pShellCtx;
+
+    for (WshShell_Size_t tokenPos = 0; tokenPos < argc;) {
+        WshShellOption_Ctx_t optCtx =
+            WshShellCmd_ParseOpt(pcCmd, argc, pArgv, pParentShell->CurrUser->Rights, &tokenPos);
+        if (!optCtx.Option)
             return WSH_SHELL_RET_STATE_ERR_EMPTY;
 
         switch (optCtx.Option->ID) {
             case CMD_LED_OPT_HELP:
                 WshShellCmd_PrintOptionsOverview(pcCmd);
-                break;
-
-            case CMD_LED_OPT_INTERACT:
                 break;
 
             case CMD_LED_OPT_INIT: {
@@ -93,7 +88,8 @@ static WSH_SHELL_RET_STATE_t shell_cmd_led(const WshShellCmd_t* pcCmd, WshShell_
                     GPIO_LedDeinit();
                     printf("LED pin deinitialized\r\n");
                 } else {
-                    printf("Unknown value for --gpio: '%s'. Use 'init' or 'deinit'\r\n", state);
+                    printf("Unknown value for %s: '%s'. Use 'init' or 'deinit'\r\n",
+                           optCtx.Option->LongName, state);
                 }
             } break;
 
@@ -127,7 +123,7 @@ static WSH_SHELL_RET_STATE_t shell_cmd_led(const WshShellCmd_t* pcCmd, WshShell_
 }
 
 const WshShellCmd_t Shell_LedCmd = {
-    .Groups  = WSH_SHELL_CMD_GROUP_ADMIN,
+    .Groups  = WSH_SHELL_CMD_GROUP_USER,
     .Name    = "led",
     .Descr   = "PC13 LED pin management",
     .Options = LedOptArr,
