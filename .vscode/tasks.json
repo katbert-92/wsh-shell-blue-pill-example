@@ -5,7 +5,7 @@
         {
             "label": "clean",
             "type": "shell",
-            "command": "make clean",
+            "command": "make -j8 clean",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -14,7 +14,7 @@
         {
             "label": "build blue_pill: release",
             "type": "shell",
-            "command": "make BUILD=Release",
+            "command": "make -j8 BUILD=Release",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -23,7 +23,7 @@
         {
             "label": "build blue_pill: debug",
             "type": "shell",
-            "command": "make",
+            "command": "make -j8",
             "group": {
                 "kind": "build",
                 "isDefault": true
