@@ -10,6 +10,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief The Berry Script Language
+ */
+#ifndef BERRY_LANG
+    #define BERRY_LANG 1
+#endif /* BERRY_LANG */
+
 void Error_Handler(void);
 
 #endif /* __MAIN_H */

@@ -16,6 +16,8 @@ EXAMPLE_DIR := ./blue_pill
 INCLUDE_FLAGS_COMMON := -I.
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/shell
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/berry_lang
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/berry_lang/port
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/usb
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1
@@ -35,6 +37,8 @@ OBJ_DIR := $(BUILD_DIR)/obj
 # ===== Source Files =====
 SRCS := 
 SRCS += $(wildcard $(EXAMPLE_DIR)/app/*.c)
+SRCS += $(wildcard $(EXAMPLE_DIR)/app/berry_lang/*.c)
+SRCS += $(wildcard $(EXAMPLE_DIR)/app/berry_lang/port/*.c)
 SRCS += $(wildcard $(EXAMPLE_DIR)/app/shell/*.c)
 SRCS += $(wildcard $(EXAMPLE_DIR)/app/usb/*.c)
 SRCS += $(wildcard $(EXAMPLE_DIR)/platform/*.c)
@@ -64,11 +68,18 @@ WSH_SHELL_SRCS := $(wildcard $(WSH_SHELL_DIR)/*.c)
 WSH_SHELL_OBJS := $(WSH_SHELL_SRCS:$(WSH_SHELL_DIR)/%.c=$(OBJ_DIR)/src/%.o)
 WSH_SHELL_INCLUDE_FLAGS = -I$(WSH_SHELL_DIR)
 
+# BerryLang
+BERRY_LANG_DIR := ./thirdparty/berry-lang/src
+BERRY_LANG_SRCS := $(wildcard $(BERRY_LANG_DIR)/*.c)
+BERRY_LANG_OBJS := $(BERRY_LANG_SRCS:$(BERRY_LANG_DIR)/%.c=$(OBJ_DIR)/src/%.o)
+BERRY_LANG_INCLUDE_FLAGS = -I./thirdparty/berry-lang/src
+BERRY_LANG_INCLUDE_FLAGS += -I./thirdparty/berry-lang/generate
+
 ALL_OBJS := $(OBJS) $(WSH_SHELL_OBJS) $(BERRY_LANG_OBJS)
 DEPS := $(ALL_OBJS:.o=.d)
 
 # ===== Compiler Flags =====
-INCLUDE_FLAGS := $(INCLUDE_FLAGS_COMMON) $(WSH_SHELL_INCLUDE_FLAGS) -MMD -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-format
+INCLUDE_FLAGS := $(INCLUDE_FLAGS_COMMON) $(WSH_SHELL_INCLUDE_FLAGS) $(BERRY_LANG_INCLUDE_FLAGS) -MMD -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-format
 CPU_FLAGS := -mcpu=cortex-m3 -mfloat-abi=soft -mthumb -DSTM32F103xB -DUSE_FULL_LL_DRIVER
 
 LINKER_FLAGS += -Wl,-cref
@@ -119,6 +130,11 @@ $(OBJ_DIR)/%.s.o: %.s
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/src/%.o: $(WSH_SHELL_DIR)/%.c
+	@echo "[CC] $<"
+	@$(MKDIR) $(dir $@)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/src/%.o: $(BERRY_LANG_DIR)/%.c
 	@echo "[CC] $<"
 	@$(MKDIR) $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@

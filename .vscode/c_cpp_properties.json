@@ -6,6 +6,8 @@
             "includePath": [
                 "${workspaceFolder}/blue_pill",
                 "${workspaceFolder}/blue_pill/app",
+                "${workspaceFolder}/blue_pill/app/berry_lang",
+                "${workspaceFolder}/blue_pill/app/berry_lang/port",
                 "${workspaceFolder}/blue_pill/app/shell",
                 "${workspaceFolder}/blue_pill/app/usb",
                 "${workspaceFolder}/blue_pill/platform",
@@ -18,7 +20,9 @@
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc",
                 "${workspaceFolder}/blue_pill/system",
-                "${workspaceFolder}/thirdparty/wsh-shell/src"
+                "${workspaceFolder}/thirdparty/wsh-shell/src",
+                "${workspaceFolder}/thirdparty/berry-lang/generate",
+                "${workspaceFolder}/thirdparty/berry-lang/src"
             ],
             "defines": [
                 "STM32F103xB",
