@@ -2,7 +2,3 @@
 	path = blue_pill/platform/STM32CubeF1
 	url = https://github.com/STMicroelectronics/STM32CubeF1
 
-[submodule "wsh-shell"]
-	path = wsh-shell
-	url = https://github.com/whoosh-bike/wsh-shell
-	branch = dev
