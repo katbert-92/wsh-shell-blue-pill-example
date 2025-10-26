@@ -21,7 +21,7 @@ static const WshShellUser_t Shell_UserTable[] = {
     },
 };
 
-static WshShellHistory_t Shell_HistoryStorage;
+static __attribute__((section(".SHELL_HISTORY_DATA"))) WshShellHistory_t Shell_HistoryStorage;
 
 static WshShellHistory_t Shell_HistoryRead(void) {
     return Shell_HistoryStorage;

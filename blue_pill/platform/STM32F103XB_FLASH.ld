@@ -41,24 +41,22 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 128K
-RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 20K
+  FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 128K
+  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 20K
 }
 
 /* Define output sections */
 SECTIONS
 {
   /* The startup code goes first into FLASH */
-  .isr_vector :
-  {
+  .isr_vector : {
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
 
   /* The program code and other data goes into FLASH */
-  .text :
-  {
+  .text : {
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */
     *(.text*)          /* .text* sections (code) */
@@ -74,15 +72,17 @@ SECTIONS
   } >FLASH
 
   /* Constant data goes into FLASH */
-  .rodata :
-  {
+  .rodata : {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);
   } >FLASH
 
-  .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+  .ARM.extab : {
+    *(.ARM.extab* .gnu.linkonce.armextab.*)
+  } >FLASH
+
   .ARM : {
     __exidx_start = .;
     *(.ARM.exidx*)
@@ -95,6 +95,7 @@ SECTIONS
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
   } >FLASH
+
   .init_array :
   {
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -102,6 +103,7 @@ SECTIONS
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
   } >FLASH
+
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -125,7 +127,6 @@ SECTIONS
     _edata = .;        /* define a global symbol at data end */
   } >RAM AT> FLASH
 
-  
   /* Uninitialized data section */
   . = ALIGN(4);
   .bss :
@@ -153,7 +154,12 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
-  
+  /* NOINIT section for custom data */
+  .noInitData (NOLOAD) : ALIGN(4) {
+      PROVIDE(__start_no_init_data = .) ;
+      *(.SHELL_HISTORY_DATA*)
+      PROVIDE(__end_no_init_data = .) ;
+  } >RAM 
 
   /* Remove information from the standard libraries */
   /* /DISCARD/ :
