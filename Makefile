@@ -13,23 +13,22 @@ RM := rm -rf
 EXAMPLE_DIR := ./blue_pill
 
 # ===== Paths =====
-SRC_DIR := -I.
-SRC_DIR += -I$(EXAMPLE_DIR)/app
-SRC_DIR += -I$(EXAMPLE_DIR)/app/shell
-SRC_DIR += -I$(EXAMPLE_DIR)/app/usb
-SRC_DIR += -I$(EXAMPLE_DIR)/platform
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/Legacy
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
-SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
-SRC_DIR += -I$(EXAMPLE_DIR)/system
+INCLUDE_FLAGS_COMMON := -I.
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/shell
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/app/usb
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/Legacy
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/system
 
-CORE_DIR := ./thirdparty/wsh-shell/src
 BUILD_DIR := $(EXAMPLE_DIR)/build
 OBJ_DIR := $(BUILD_DIR)/obj
 
@@ -55,17 +54,21 @@ SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Libr
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c
 SRCS += $(EXAMPLE_DIR)/system/syscalls.c
-
 SRCS += $(EXAMPLE_DIR)/platform/startup_stm32f103xb.s
-CORE_SRCS := $(wildcard $(CORE_DIR)/*.c)
 
 OBJS := $(SRCS:%=$(OBJ_DIR)/%.o)
-CORE_OBJS := $(CORE_SRCS:$(CORE_DIR)/%.c=$(OBJ_DIR)/src/%.o)
-ALL_OBJS := $(OBJS) $(CORE_OBJS)
+
+# WshShell
+WSH_SHELL_DIR := ./thirdparty/wsh-shell/src
+WSH_SHELL_SRCS := $(wildcard $(WSH_SHELL_DIR)/*.c)
+WSH_SHELL_OBJS := $(WSH_SHELL_SRCS:$(WSH_SHELL_DIR)/%.c=$(OBJ_DIR)/src/%.o)
+WSH_SHELL_INCLUDE_FLAGS = -I$(WSH_SHELL_DIR)
+
+ALL_OBJS := $(OBJS) $(WSH_SHELL_OBJS) $(BERRY_LANG_OBJS)
 DEPS := $(ALL_OBJS:.o=.d)
 
 # ===== Compiler Flags =====
-COMMON_FLAGS := $(SRC_DIR) -I$(CORE_DIR) -MMD -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-format
+INCLUDE_FLAGS := $(INCLUDE_FLAGS_COMMON) $(WSH_SHELL_INCLUDE_FLAGS) -MMD -Wall -Wextra -Wpedantic -Wno-unused-parameter -Wno-format
 CPU_FLAGS := -mcpu=cortex-m3 -mfloat-abi=soft -mthumb -DSTM32F103xB -DUSE_FULL_LL_DRIVER
 
 LINKER_FLAGS += -Wl,-cref
@@ -85,9 +88,9 @@ DEBUG_FLAGS := -O0 -g -DWSH_SHELL_ASSERT_ENABLE
 RELEASE_FLAGS := -O2 -DNDEBUG
 
 ifeq ($(BUILD),Debug)
-    CFLAGS := $(COMMON_FLAGS) $(CPU_FLAGS) $(DEBUG_FLAGS)
+    CFLAGS := $(INCLUDE_FLAGS) $(CPU_FLAGS) $(DEBUG_FLAGS)
 else
-    CFLAGS := $(COMMON_FLAGS) $(CPU_FLAGS) $(RELEASE_FLAGS)
+    CFLAGS := $(INCLUDE_FLAGS) $(CPU_FLAGS) $(RELEASE_FLAGS)
 endif
 
 # ===== Targets =====
@@ -115,7 +118,7 @@ $(OBJ_DIR)/%.s.o: %.s
 	@$(MKDIR) $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/src/%.o: $(CORE_DIR)/%.c
+$(OBJ_DIR)/src/%.o: $(WSH_SHELL_DIR)/%.c
 	@echo "[CC] $<"
 	@$(MKDIR) $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
