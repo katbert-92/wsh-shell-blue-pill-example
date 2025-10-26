@@ -29,7 +29,7 @@ SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device
 SRC_DIR += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
 SRC_DIR += -I$(EXAMPLE_DIR)/system
 
-CORE_DIR := ./wsh-shell/src
+CORE_DIR := ./thirdparty/wsh-shell/src
 BUILD_DIR := $(EXAMPLE_DIR)/build
 OBJ_DIR := $(BUILD_DIR)/obj
 
