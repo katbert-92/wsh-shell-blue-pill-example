@@ -1,6 +1,18 @@
 #include "main.h"
 #include "wsh_shell.h"
 
+static void WatchdogInit(void) {
+    static IWDG_HandleTypeDef hiwdg = {
+        .Instance       = IWDG,
+        .Init.Prescaler = IWDG_PRESCALER_64,
+        .Init.Reload    = 3000,
+    };
+
+    if (HAL_IWDG_Init(&hiwdg) != HAL_OK) {
+        Error_Handler();
+    }
+}
+
 /* clang-format off */
 #define CMD_RESET_OPT_TABLE() \
 X_CMD_ENTRY(CMD_RESET_OPT_DEF, WSH_SHELL_OPT_NO(WSH_SHELL_OPT_ACCESS_EXECUTE, "Soft reset")) \
@@ -40,7 +52,8 @@ static WSH_SHELL_RET_STATE_t shell_cmd_reset(const WshShellCmd_t* pcCmd, WshShel
                 break;
 
             case CMD_RESET_OPT_HF:
-                WSH_SHELL_PRINT_INFO("Create HF exception (so pls, push the reset button...)\r\n");
+                WatchdogInit();
+                WSH_SHELL_PRINT_INFO("Create HF exception and restart\r\n");
                 ((void (*)(void))0x01)();
                 break;
 
