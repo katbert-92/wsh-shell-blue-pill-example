@@ -42,6 +42,7 @@ SRCS += $(wildcard $(EXAMPLE_DIR)/platform/*.c)
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c
+SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c
 SRCS += $(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c
