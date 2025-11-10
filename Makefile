@@ -27,6 +27,7 @@ INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Src/Legacy
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
+INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/platform/STM32CubeF1/Drivers/CMSIS/Core/Include
 INCLUDE_FLAGS_COMMON += -I$(EXAMPLE_DIR)/system
 
 BUILD_DIR := $(EXAMPLE_DIR)/build
