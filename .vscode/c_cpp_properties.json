@@ -12,12 +12,13 @@
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/CMSIS/Include",
+                "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/CMSIS/Core/Include",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
                 "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc",
-                "${workspaceFolder}/blue_pill/platform/STM32CubeF1/Drivers/CMSIS/Core/Include",
                 "${workspaceFolder}/thirdparty/wsh-shell/src"
             ],
             "defines": [
