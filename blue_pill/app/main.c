@@ -1,6 +1,5 @@
 #include "main.h"
 #include "usb_device.h"
-#include "usbd_cdc_if.h"
 
 #include "shell.h"
 
@@ -77,7 +76,7 @@ int main(void) {
 
     for (;;) {
         int symbol = getchar();
-        // printf("key: %d (0x%02X)\n", symbol, (unsigned char)symbol);
+        // printf("key: %c / %d / 0x%02X\r\n", symbol, (unsigned char)symbol);
 
         if (symbol == EOF)
             continue;
