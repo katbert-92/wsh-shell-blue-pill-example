@@ -44,7 +44,7 @@
             }
         },
         {
-            "label": "⌨️ Setup Python env",
+            "label": "⌨️ Setup python env",
             "type": "shell",
             "command": "bash",
             "args": [

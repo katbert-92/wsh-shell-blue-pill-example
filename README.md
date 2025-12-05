@@ -18,7 +18,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Or just run `Setup Python env` task
+Or just run `Setup python env` task
 
 ## 2. Build and programm tools
 
