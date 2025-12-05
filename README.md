@@ -1,5 +1,7 @@
 # Wsh-Shell Blue Pill Example
 
+Whoosh Shell example for popular stm32f103-based demo board on Bare-Metal
+
 This guide explains how to build, flash, and debug the **Blue Pill** firmware using `make`, `OpenOCD`, and VSCode.  
 This example imports `wsh-shell` project as git submodule.
 
@@ -18,7 +20,7 @@ pip install -r requirements.txt
 
 ## 2. Build and programm tools
 
-`make`, `openocd` and `arm-none-eabi` must be installed
+`make`, `openocd` and `arm-none-eabi-xxx` must be installed
 
 ```bash
 make --version
@@ -44,20 +46,17 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 ## 3. Setup `.env`
 
-Create a .env file in the project root with your toolchain and OpenOCD paths.  
+Create a .env file in the project root with your toolchain and OpenOCD paths.
 Example for macOS:
 
 ```bash
-MAKE_PATH="/opt/homebrew/opt/make/libexec/gnubin/make"
 OPENOCD_PATH="/opt/homebrew/bin/openocd"
-ARM_NONE_EABI_PATH="/Users/katbert/my-utils/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin"
 GDB_PATH="/Users/katbert/my-utils/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-gdb"
-NM_PATH="/Users/katbert/my-utils/arm-gnu-toolchain-14.2.rel1-darwin-arm64-arm-none-eabi/bin/arm-none-eabi-nm"
 ```
 
 ## 4. Generate VSCode launch.json
 
-Run `generate launch.json` vscode task  
+Run `generate launch.json` vscode task
 This will create .vscode/launch.json for debugging the Blue Pill directly from VSCode.
 
 ## 5. Build
