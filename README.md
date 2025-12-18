@@ -18,6 +18,8 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+Or just run `Setup python env` task
+
 ## 2. Build and programm tools
 
 `make`, `openocd` and `arm-none-eabi-xxx` must be installed
