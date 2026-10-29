@@ -158,6 +158,7 @@ SECTIONS
   .noInitData (NOLOAD) : ALIGN(4) {
       PROVIDE(__start_no_init_data = .) ;
       *(.SHELL_HISTORY_DATA*)
+      *(.SHELL_SESSION_DATA*)
       PROVIDE(__end_no_init_data = .) ;
   } >RAM 
 
